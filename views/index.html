@@ -1,0 +1,44 @@
+{% extends "layouts/master.html" %}
+
+{% block content %}
+<div ng-controller="IndexCtrl">
+  <div class="col-md-12">
+    <h3 class="pull-left">Projects <a style="font-size: 15px;" class="btn-link" href="/projects/add">add a project</a></h3>
+    <input type="text" style="width: 200px; margin-top: 16px;" class="form-control pull-right" placeholder="Filter projects" ng-model="projectFilter">
+    <div class="clearfix"></div>
+    <hr>
+    <div class="col-md-3" ng-repeat="project in projects | filter: projectFilter">
+      <div class="well">
+        <h4>{{project.name}}</h4>
+        <p>{{project.description}}</p>
+        <a href="/projects/{{project._id}}" class="btn-link">Open project</a>
+      </div>
+    </div>
+    <div class="col-md-3" ng-hide="projects.length > 0">
+      <div class="well">
+        <h4>No projects added yet</h4>
+        <!-- <p></p> -->
+        <a href="/projects/add" class="btn-link">Add a project</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block javascript %}
+<script>
+  $('#navHome').addClass('active');
+</script>
+
+<script>
+angular.module('DeployerApp')
+  .controller('IndexCtrl', ['$scope', '$http', function ($scope, $http) {
+    window.s = $scope;
+    $scope.projects = <%= JSON.stringify(projects) %>;
+
+    function fail (err) {
+      toastr.error('Error');
+    }
+  }]);
+</script>
+{% endblock %}

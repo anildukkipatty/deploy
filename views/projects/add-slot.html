@@ -1,0 +1,56 @@
+{% extends "../layouts/master.html" %}
+
+{% block content %}
+<div ng-controller="ProjectSlotAddCtrl">
+  <div class="col-md-12">
+    <div class="col-md-4 col-md-offset-4 well">
+      <h3>Add a slot</h3>
+      <hr>
+      <form ng-submit="slotAdd(slot)">
+        <div class="form-group">
+          <label>Name</label>
+          <input type="text" class="form-control" ng-model="slot.name">
+        </div>
+        <div class="form-group">
+          <label>Location</label>
+          <input type="text" class="form-control" ng-model="slot.location">
+        </div>
+        <div class="form-group">
+          <label>Branch</label>
+          <input type="text" class="form-control" ng-model="slot.branch">
+        </div>
+        <div class="form-group">
+          <label>Ref</label>
+          <input type="text" class="form-control" ng-model="slot.ref">
+        </div>
+        <button class="btn btn-primary btn-sm" type="submit">Add slot</button>
+        <a href="/projects/<%= projectId %>" class="btn btn-link">Cancel</a>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block javascript %}
+<script>
+  $('#navDashboard').addClass('active');
+</script>
+
+<script>
+  angular.module('DeployerApp')
+    .controller('ProjectSlotAddCtrl', ['$scope', '$http', function ($scope, $http) {
+      $scope.slotAdd = slotAdd;
+
+      function slotAdd (slot) {
+        $http.post('/projects/<%= projectId %>/slots', slot)
+          .then(function (slot) {
+            window.location.href = '/projects/<%= projectId %>';
+          }, fail);
+      }
+
+      function fail (err) {
+        toastr.error('Error');
+      }
+    }]);
+</script>
+{% endblock %}

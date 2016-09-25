@@ -1,0 +1,25 @@
+{
+  "name": "ckyc-main",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "nodemon ./bin/www"
+  },
+  "dependencies": {
+    "bcrypt": "^0.8.7",
+    "body-parser": "~1.13.2",
+    "cookie-parser": "~1.3.5",
+    "debug": "~2.2.0",
+    "eris-contracts": "^0.13.3",
+    "eris-db": "^0.15.0",
+    "express": "~4.13.1",
+    "hashids": "^1.1.0",
+    "hjs": "~0.0.6",
+    "jsonwebtoken": "^7.1.9",
+    "mongoose": "^4.5.9",
+    "morgan": "~1.6.1",
+    "serve-favicon": "~2.3.0",
+    "superagent": "^2.2.0",
+    "swig": "^1.4.2"
+  }
+}

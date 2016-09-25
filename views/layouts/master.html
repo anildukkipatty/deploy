@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="DeployerApp">
+  <head>
+    <title>Deployer</title>
+    <link href="/components/bootstrap/dist/css/bootstrap.min.css" media="screen" rel="stylesheet">
+    <link href="/components/toastr/toastr.min.css" media="screen" rel="stylesheet">
+    <link href="/css/style.css" media="screen" rel="stylesheet">
+  </head>
+  <body ng-controller="MainCtrl" >
+    <div class="container">
+      <div class="header clearfix">
+        <nav>
+          <ul class="nav nav-pills pull-right">
+            <li id="navHome" role="presentation"><a href="/">Home</a></li>
+            <li id="navKey" role="presentation"><a ng-click="fetchKey()" class="cur">Get public key</a></li>
+            <li id="navLogout" role="presentation"><a href="/logout">Logout</a></li>
+          </ul>
+        </nav>
+        <h3 class="text-muted">
+          <a href="/">Deployer</a>
+        </h3>
+      </div>
+
+      <div class="row">
+        {% block content %}{% endblock %}
+      </div>
+
+
+      <footer class="footer">
+        <p>&copy; Esscale 2016 </p>
+      </footer>
+    </div>
+
+    <script src="/components/jquery/dist/jquery.min.js"></script>
+    <script src="/components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="/components/lodash/dist/lodash.min.js"></script>
+    <script src="/components/angular/angular.min.js"></script>
+    <script src="/components/toastr/toastr.min.js"></script>
+
+    <script>
+      angular.module('DeployerApp', [])
+        .controller('MainCtrl', ['$scope', '$http', function ($scope, $http) {
+          $scope.fetchKey = fetchKey;
+
+          function fetchKey () {
+            $http.get('/fetch-key')
+              .then(function (data) {
+                alert(data.data.key);
+              }, fail);
+          }
+
+          function fail (err) {
+            toastr.error('Error');
+          }
+        }]);
+    </script>
+
+    {% block javascript %}{% endblock %}
+  </body>
+</html>

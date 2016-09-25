@@ -1,0 +1,67 @@
+{% extends "../layouts/master.html" %}
+
+{% block content %}
+<div ng-controller="ProjectCtrl">
+  <div class="col-md-12">
+    <div class="pull-left">
+      <h3>{{project.name}} <a style="font-size: 15px;" class="btn-link" href="/projects/{{project._id}}/slots/add">add a slot</a></h3>
+      <p>{{project.description}}</p>
+    </div>
+    <input type="text" style="width: 200px; margin-top: 16px;" class="form-control pull-right" placeholder="Filter slots" ng-model="slotFilter">
+    <div class="clearfix"></div>
+    <hr>
+    <div class="col-md-3" ng-repeat="slot in project.slots | filter: slotFilter">
+      <div class="well">
+        <h4>{{slot.name}}</h4>
+        <hr>
+        <dl class="">
+          <dt>Location</dt>
+          <dd>{{slot.location}}</dd>
+        </dl>
+        <dl class="">
+          <dt>Branch</dt>
+          <dd>{{slot.branch}}</dd>
+        </dl>
+        <dl class="">
+          <dt>Ref</dt>
+          <dd>{{slot.ref}}</dd>
+        </dl>
+        <button ng-click="slotDelete(slot, $index)" class="btn-link" style="padding: 2px 0px;">Delete</button>
+      </div>
+    </div>
+    <div class="col-md-3" ng-hide="project.slots.length > 0">
+      <div class="well">
+        <h4>No slots added yet</h4>
+        <!-- <p></p> -->
+        <a href="/projects/{{project._id}}/slots/add" class="btn-link">Add a slot</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block javascript %}
+<script>
+  $('#navDashboard').addClass('active');
+</script>
+
+<script>
+  angular.module('DeployerApp')
+    .controller('ProjectCtrl', ['$scope', '$http', function ($scope, $http) {
+      window.s = $scope;
+      $scope.project = <%= JSON.stringify(project) %>;
+      $scope.slotDelete = slotDelete;
+
+      function slotDelete (slot, $index) {
+        $http.delete('/projects/' + $scope.project._id + '/slots/' + slot.name)
+          .then(function (data) {
+            $scope.project.slots.splice($index, 1);
+          }, fail);
+      }
+
+      function fail (err) {
+        toastr.error('Error');
+      }
+    }]);
+</script>
+{% endblock %}
