@@ -5,7 +5,7 @@ var Project = require('../models/Project');
 var Auth = require('../helpers/auth');
 var mongoose = require('mongoose');
 
-router.get('/:id/callback', function(req, res) {
+router.post('/:id/callback', function(req, res) {
   console.log(JSON.stringify(req.body));
   res.sendStatus(200);
 });
