@@ -24,17 +24,29 @@ router.post('/:id/callback', function(req, res) {
 
     if (! slot.status) return res.send('Auto deploy disabled', 500);
 
-    var connectionString = "ssh " + project.serverUser + "@" + project.server + " ";
-    var commands = slot.commands;
-    console.log(connectionString + commands);
-    exec(connectionString + commands,
-      function (err, stdOut, stdErr) {
-        console.log('out: ' + stdOut);
-        console.log('err: ' + stdErr);
 
+    var connectionString = "ssh " + project.serverUser + "@" + project.server + " ";
+    var commands = "cd " + slot.location + " && " + slot.commands;
+    console.log(connectionString + commands);
+
+    exec('ssh-keyscan -H -p 22 '+ project.server +' >> ~/.ssh/known_hosts',
+      function (err, stdOut, stdErr) {
+        console.log('keyscan out: ' + stdOut);
+        console.log('keyscan err: ' + stdErr);
         if (err) console.log(err);
 
-        return res.send(stdOut);
+
+        exec(connectionString + commands,
+          function (err, stdOut, stdErr) {
+            console.log('out: ' + stdOut);
+            console.log('err: ' + stdErr);
+
+            if (err) console.log(err);
+
+            return res.send(stdOut);
+          }
+        )
+
       }
     )
 
