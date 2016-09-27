@@ -13,6 +13,18 @@ var projectSchema = mongoose.Schema({
       branch: String,
       ref: String,
       commands: String,
+      results: [
+        {
+          stage: Number,
+          err: String,
+          stdout: String,
+          stderr: String,
+          created_at: {
+            type: Date,
+            default: Date.now
+          }
+        }
+      ]
       status: {
         type: Boolean,
         default: true

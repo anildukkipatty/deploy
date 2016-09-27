@@ -36,6 +36,9 @@
           <dd>{{slot.commands}}</dd>
         </dl>
         <button ng-click="slotDelete(slot, $index)" class="btn-link" style="padding: 2px 0px;">Delete</button>
+        <pre>
+          {{slot.results}}
+        </pre>
       </div>
     </div>
     <div class="col-md-3" ng-hide="project.slots.length > 0">

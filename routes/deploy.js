@@ -5,9 +5,9 @@ var Project = require('../models/Project');
 var Auth = require('../helpers/auth');
 var mongoose = require('mongoose');
 var _ = require('lodash');
-var SSH = require('simple-ssh');
 var fs = require('fs');
 var exec = require('child_process').exec;
+var DeployResult = require('../models/DeployResult');
 
 router.post('/:id/callback', function(req, res) {
   var data = req.body;
@@ -21,6 +21,7 @@ router.post('/:id/callback', function(req, res) {
     var slot = slots[0];
     if (! slot.status) return res.send('Auto deploy disabled', 500);
 
+    var deployResult = {stage: 1};
     var connectionString = "ssh " + project.serverUser + "@" + project.server + " ";
     var commands = "cd " + slot.location + " && " + slot.commands;
 
@@ -29,7 +30,16 @@ router.post('/:id/callback', function(req, res) {
 
         exec(connectionString + commands,
           function (err, stdOut, stdErr) {
-            if (err) console.log(err);
+            deployResult.stage = 2;
+            deployResult.stdout = stdOut;
+            deployResult.stderr = stdErr;
+            if (err) {
+              deployResult.err = err;
+              deployResult.stage = 3;
+            };
+            slot.results.push(deployResult);
+            slot.save(function (data) {
+            });
             return res.send(stdOut);
           }
         );
