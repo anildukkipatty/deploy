@@ -28,7 +28,7 @@ router.post('/:id/callback', function(req, res) {
     exec('ssh-keyscan -H -p 22 '+ project.server +' >> ~/.ssh/known_hosts',
       function (err, stdOut, stdErr) {
 
-        exec(connectionString + commands,
+        exec(connectionString + "'" + commands + "'",
           function (err, stdOut, stdErr) {
             deployResult.stage = 2;
             deployResult.stdout = stdOut;
@@ -38,8 +38,9 @@ router.post('/:id/callback', function(req, res) {
               deployResult.stage = 3;
             };
             console.log(deployResult);
-            slot.results.push(deployResult);
-            slot.save(function (data) {
+            var slotIndex = project.slots.indexOf(slot);
+            project.slots[slotIndex].result.push(deployResult)
+            project.save(function (data) {
               return res.send(stdOut);
             });
           }
