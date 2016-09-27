@@ -24,7 +24,7 @@ router.post('/:id/callback', function(req, res) {
 
     if (! slot.status) return res.send('Auto deploy disabled', 500);
 
-    var connectionString = "ssh " + slot.serverUser + "@" + slot.server + " ";
+    var connectionString = "ssh " + project.serverUser + "@" + project.server + " ";
     var commands = slot.commands;
     console.log("ssh " + connectionString + commands);
     exec("ssh " + connectionString + commands,
