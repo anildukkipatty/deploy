@@ -26,6 +26,7 @@ router.post('/:id/callback', function(req, res) {
 
     var connectionString = "ssh " + slot.serverUser + "@" + slot.server + " ";
     var commands = slot.commands;
+    console.log("ssh " + connectionString + commands);
     exec("ssh " + connectionString + commands,
       function (err, stdOut, stdErr) {
         console.log('out: ' + stdOut);
