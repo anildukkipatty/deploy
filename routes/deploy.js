@@ -37,7 +37,7 @@ router.post('/:id/callback', function(req, res) {
               deployResult.err = err;
               deployResult.stage = 3;
             };
-            console.log(deployResult);
+
             var slotIndex = project.slots.indexOf(slot);
             project.slots[slotIndex].results.push(deployResult)
             project.save(function (data) {
