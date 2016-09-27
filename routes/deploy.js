@@ -32,6 +32,8 @@ router.post('/:id/callback', function(req, res) {
         console.log('err: ' + stdErr);
 
         if (err) console.log(err);
+
+        return res.send(stdOut);
       }
     )
 
