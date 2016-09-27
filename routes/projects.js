@@ -4,6 +4,7 @@ var config = require('../config');
 var Project = require('../models/Project');
 var Auth = require('../helpers/auth');
 var mongoose = require('mongoose');
+var _ = require('lodash');
 
 router.get('/add', Auth.authRedirect, function(req, res, next) {
   res.render('projects/add.html', { user: req.user });
@@ -31,6 +32,15 @@ router.put('/:id/:slotName', Auth.authRedirect, function(req, res, next) {
     }, function (err, project) {
       if (err) return res.sendStatus(500);
       res.send(project);
+  });
+});
+
+router.get('/:projectId/slot/:slotName/results', function (req, res) {
+  Project.findOne({_id: mongoose.Types.ObjectId(req.params.projectId)}, function (err, project) {
+    if (err) return res.send(err, 500);
+    var slots = _.filter(project.slots, {name: req.params.slotName});
+    if (! slots || slots.length <= 0) return res.send([]);
+    return res.send(slots[0].results);
   });
 });
 
