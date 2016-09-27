@@ -18,6 +18,21 @@ router.get('/:id', Auth.authRedirect, function(req, res, next) {
     res.render('projects/project.html', { user: req.user, project: project });
   });
 });
+router.delete('/:id', Auth.authRedirect, function(req, res, next) {
+  Project.find({_id: mongoose.Types.ObjectId(req.params.id)}).remove().exec();
+  res.sendStatus(200);
+});
+router.put('/:id/:slotName', Auth.authRedirect, function(req, res, next) {
+  Project.update({_id: mongoose.Types.ObjectId(req.params.id), 'slots.name': req.params.slotName},
+    {
+      $set: {
+        'slots.$.status': req.body.status
+      }
+    }, function (err, project) {
+      if (err) return res.sendStatus(500);
+      res.send(project);
+  });
+});
 
 router.post('/', Auth.authRedirect, function (req, res) {
   var projectData = req.body;

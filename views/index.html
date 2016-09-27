@@ -12,6 +12,7 @@
         <h4>{{project.name}}</h4>
         <p>{{project.description}}</p>
         <a href="/projects/{{project._id}}" class="btn-link">Open project</a>
+        <button ng-click="projectDelete(project, $index)" class="btn-link">Delete</button>
       </div>
     </div>
     <div class="col-md-3" ng-hide="projects.length > 0">
@@ -35,6 +36,15 @@ angular.module('DeployerApp')
   .controller('IndexCtrl', ['$scope', '$http', function ($scope, $http) {
     window.s = $scope;
     $scope.projects = <%= JSON.stringify(projects) %>;
+    $scope.projectDelete = projectDelete;
+
+    function projectDelete (project, index) {
+      if (! confirm('Are you sure!')) return;
+      $http.delete('/projects/' + project._id)
+        .then(function (data) {
+          $scope.projects.splice(index, 1);
+        }, fail);
+    }
 
     function fail (err) {
       toastr.error('Error');

@@ -16,9 +16,11 @@
     "hashids": "^1.1.0",
     "hjs": "~0.0.6",
     "jsonwebtoken": "^7.1.9",
+    "lodash": "^4.16.1",
     "mongoose": "^4.5.9",
     "morgan": "~1.6.1",
     "serve-favicon": "~2.3.0",
+    "simple-ssh": "^0.9.0",
     "superagent": "^2.2.0",
     "swig": "^1.4.2"
   }

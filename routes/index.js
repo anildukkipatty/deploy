@@ -47,7 +47,6 @@ router.get('/active-user-profile', function (req, res) {
 
 router.get('/fetch-key', Auth.authRedirect, function (req, res) {
   var key = fs.readFileSync(config.keyPath, 'utf8');
-  console.log(key);
 
   res.send({key: key});
 });
