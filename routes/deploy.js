@@ -12,7 +12,7 @@ var exec = require('child_process').exec;
 router.post('/:id/callback', function(req, res) {
   var data = req.body;
   if (! data.ref) return res.sendStatus(500);
-  return res.sendStatus(200);
+  // return res.sendStatus(200);
 
   Project.findOne({_id: mongoose.Types.ObjectId(req.params.id)}, function (err, project) {
     if (err || !project) return res.sendStatus(500);
