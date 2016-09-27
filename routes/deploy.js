@@ -16,16 +16,13 @@ router.post('/:id/callback', function(req, res) {
 
   Project.findOne({_id: mongoose.Types.ObjectId(req.params.id)}, function (err, project) {
     if (err || !project) return res.sendStatus(500);
-    //  -ssh into slot
-    // run commands file
     // return output
-
 
     var slots = _.filter(project.slots, {ref: data.ref});
     if (slot.length <= 0) return res.sendStatus(500);
     var slot = slots[0];
 
-    if (! slot.status) return res.send(200);
+    if (! slot.status) return res.send(500);
 
     var connectionString = "ssh " + slot.serverUser + "@" + slot.server + " ";
     var commands = slot.commands;
