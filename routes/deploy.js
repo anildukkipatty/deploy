@@ -19,7 +19,7 @@ router.post('/:id/callback', function(req, res) {
     // return output
 
     var slots = _.filter(project.slots, {ref: data.ref});
-    if (slot.length <= 0) return res.sendStatus(500);
+    if (slots.length <= 0) return res.sendStatus(500);
     var slot = slots[0];
 
     if (! slot.status) return res.send(500);
