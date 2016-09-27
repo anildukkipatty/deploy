@@ -37,10 +37,11 @@ router.post('/:id/callback', function(req, res) {
               deployResult.err = err;
               deployResult.stage = 3;
             };
+            console.log(deployResult);
             slot.results.push(deployResult);
             slot.save(function (data) {
+              return res.send(stdOut);
             });
-            return res.send(stdOut);
           }
         );
 
