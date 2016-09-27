@@ -12,4 +12,4 @@ var deployResultSchema = mongoose.Schema({
   }
 })
 
-module.exports = mongoose.model('deployResult', projectSchema)
+module.exports = mongoose.model('deployResult', deployResultSchema)

@@ -24,7 +24,7 @@ var projectSchema = mongoose.Schema({
             default: Date.now
           }
         }
-      ]
+      ],
       status: {
         type: Boolean,
         default: true
