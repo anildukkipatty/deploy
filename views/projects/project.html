@@ -78,7 +78,7 @@
           }, fail);
       }
       function callbackUrlAlert () {
-        var message = window.location.protocol + '//' + window.location.host + '/deploy//callback';
+        var message = window.location.protocol + '/' + $scope.project._id + '/' + window.location.host + '/deploy//callback';
         alert(message);
       }
 
