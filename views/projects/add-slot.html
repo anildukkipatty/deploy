@@ -19,10 +19,10 @@
           <label>Branch</label>
           <input type="text" class="form-control" ng-model="slot.branch">
         </div>
-        <div class="form-group">
+        <!-- <div class="form-group">
           <label>Ref</label>
           <input type="text" class="form-control" ng-model="slot.ref">
-        </div>
+        </div> -->
         <div class="form-group">
           <label>Commands</label>
           <textarea class="form-control" ng-model="slot.commands"></textarea>
@@ -44,12 +44,17 @@
   angular.module('DeployerApp')
     .controller('ProjectSlotAddCtrl', ['$scope', '$http', function ($scope, $http) {
       $scope.slotAdd = slotAdd;
+      $scope.callbackUrlAlert = callbackUrlAlert;
 
       function slotAdd (slot) {
         $http.post('/projects/<%= projectId %>/slots', slot)
           .then(function (slot) {
             window.location.href = '/projects/<%= projectId %>';
           }, fail);
+      }
+      function callbackUrlAlert () {
+        var message = window.location.protocol + '//' + window.location.host + '/deploy//callback';
+        alert();
       }
 
       function fail (err) {

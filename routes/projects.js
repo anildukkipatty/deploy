@@ -55,6 +55,8 @@ router.post('/', Auth.authRedirect, function (req, res) {
 });
 
 router.post('/:id/slots', Auth.authRedirect, function(req, res, next) {
+  var slot = req.body;
+  slot.ref = 'refs/heads/' + slot.branch;
   Project.update({_id: req.params.id}, {$push: {slots: req.body}}, function (err, obj) {
     if (err) return res.send(err, 500);
     res.send(obj);
