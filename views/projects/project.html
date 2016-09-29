@@ -64,6 +64,7 @@
       $scope.project = <%= JSON.stringify(project) %>;
       $scope.slotDelete = slotDelete;
       $scope.slotStatusChange = slotStatusChange;
+      $scope.callbackUrlAlert = callbackUrlAlert;
 
       function slotDelete (slot, $index) {
         $http.delete('/projects/' + $scope.project._id + '/slots/' + slot.name)
@@ -75,6 +76,10 @@
         $http.put('/projects/' + $scope.project._id + '/' + slot.name, {status: slot.status})
           .then(function (data) {
           }, fail);
+      }
+      function callbackUrlAlert () {
+        var message = window.location.protocol + '//' + window.location.host + '/deploy//callback';
+        alert();
       }
 
       function fail (err) {
