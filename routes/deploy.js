@@ -62,7 +62,6 @@ router.post('/:id/manual', function(req, res) {
     var slots = _.filter(project.slots, {name: data.name});
     if (slots.length <= 0) return res.send('No slot found', 500);
     var slot = slots[0];
-    if (! slot.status) return res.send('Auto deploy disabled', 500);
 
     var deployResult = {stage: 1};
     var connectionString = "ssh " + project.serverUser + "@" + project.server + " ";

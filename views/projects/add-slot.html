@@ -46,6 +46,8 @@
       $scope.slotAdd = slotAdd;
 
       function slotAdd (slot) {
+        slot.commands = slot.commands.replace(/\n/ig, "");
+        slot.branch = slot.branch.toLowerCase();
         $http.post('/projects/<%= projectId %>/slots', slot)
           .then(function (slot) {
             window.location.href = '/projects/<%= projectId %>';

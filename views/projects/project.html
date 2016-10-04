@@ -85,7 +85,7 @@
       }
       function deployNow (slot) {
         slot.deployInProgress = true;
-        $http.post('/deploy/'+$scope.project._id+'/manual', {slot: slot})
+        $http.post('/deploy/'+$scope.project._id+'/manual', slot)
           .then(function (data) {
             slot.deployInProgress = false;
           }, function (err) {
