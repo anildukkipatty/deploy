@@ -18,8 +18,9 @@
           <input type="checkbox" ng-model="slot.status" ng-change="slotStatusChange(slot)">
           {{slot.status ? 'Enabled' : 'Disabled'}}
         </label>
-        <button ng-hide="slot.status || deployInProgress" ng-click="deployNow(slot)" class="btn btn-link">Deploy now</button>
-        <button ng-hide="deployInProgress" disabled>Deploying in progress ..</button>
+        {{slot.deployInProgress}}
+        <button ng-hide="slot.status || slot.deployInProgress" ng-click="deployNow(slot)" class="btn btn-link">Deploy now</button>
+        <button class="btn btn-link" ng-show="slot.deployInProgress" disabled>Deploying in progress ..</button>
         <hr>
         <dl class="">
           <dt>Location</dt>
@@ -61,7 +62,7 @@
 
 <script>
   angular.module('DeployerApp')
-    .controller('ProjectCtrl', ['$scope', '$http', function ($scope, $http) {
+    .controller('ProjectCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
       window.s = $scope;
       $scope.project = <%= JSON.stringify(project) %>;
       $scope.slotDelete = slotDelete;
@@ -86,6 +87,9 @@
       }
       function deployNow (slot) {
         slot.deployInProgress = true;
+        startDeploy(slot);
+      }
+      function startDeploy (slot) {
         $http.post('/deploy/'+$scope.project._id+'/manual', slot)
           .then(function (data) {
             slot.deployInProgress = false;
