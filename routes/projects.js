@@ -44,6 +44,31 @@ router.get('/:projectId/slot/:slotName/results', function (req, res) {
   });
 });
 
+router.get('/:projectId/slot/:slotName/edit', function (req, res) {
+  Project.findOne({_id: mongoose.Types.ObjectId(req.params.projectId)}, function (err, project) {
+    if (err) return res.send(err, 500);
+    var slots = _.filter(project.slots, {name: req.params.slotName});
+    if (! slots || slots.length <= 0) return res.send('No such slot found.');
+    return res.render('projects/edit-slot.html', {slot: slots[0], projectId: req.params.projectId});
+  });
+});
+router.post('/:projectId/slot/:slotName/edit', function (req, res) {
+  Project.findOne({_id: mongoose.Types.ObjectId(req.params.projectId)}, function (err, project) {
+    if (err) return res.send(err, 500);
+    project.slots = _.map(project.slots, function (slot) {
+      if (slot.name == req.params.slotName) {
+        slot = req.body;
+      }
+      return slot;
+    });
+
+    project.save(function (err, result) {
+      // console.log();
+      return res.send(result);
+    });
+  });
+});
+
 router.post('/', Auth.authRedirect, function (req, res) {
   var projectData = req.body;
   projectData.user = req.user._id;
