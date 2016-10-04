@@ -83,6 +83,7 @@ router.post('/:id/manual', function(req, res) {
             var slotIndex = project.slots.indexOf(slot);
             project.slots[slotIndex].results.push(deployResult)
             project.save(function (data) {
+              if (err) return res.send(err, 500);
               return res.send(stdOut);
             });
           }

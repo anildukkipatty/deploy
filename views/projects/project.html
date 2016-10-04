@@ -18,7 +18,8 @@
           <input type="checkbox" ng-model="slot.status" ng-change="slotStatusChange(slot)">
           {{slot.status ? 'Enabled' : 'Disabled'}}
         </label>
-        <button ng-hide="slot.status" ng-click="deployNow(slot)" class="btn btn-link">Deploy now</button>
+        <button ng-hide="slot.status || deployInProgress" ng-click="deployNow(slot)" class="btn btn-link">Deploy now</button>
+        <button ng-hide="deployInProgress" disabled>Deploying in progress ..</button>
         <hr>
         <dl class="">
           <dt>Location</dt>
@@ -88,8 +89,9 @@
         $http.post('/deploy/'+$scope.project._id+'/manual', slot)
           .then(function (data) {
             slot.deployInProgress = false;
+            toastr.success("Deployment successfull");
           }, function (err) {
-            toastr.error('Deploy failed');
+            toastr.error('Deployment failed');
             slot.deployInProgress = false;
           });
       }
