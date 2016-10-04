@@ -18,6 +18,7 @@
           <input type="checkbox" ng-model="slot.status" ng-change="slotStatusChange(slot)">
           {{slot.status ? 'Enabled' : 'Disabled'}}
         </label>
+        <button ng-hide="slot.status" ng-click="deployNow(slot)" class="btn btn-link">Deploy now</button>
         <hr>
         <dl class="">
           <dt>Location</dt>
@@ -65,6 +66,7 @@
       $scope.slotDelete = slotDelete;
       $scope.slotStatusChange = slotStatusChange;
       $scope.callbackUrlAlert = callbackUrlAlert;
+      $scope.deployNow = deployNow;
 
       function slotDelete (slot, $index) {
         $http.delete('/projects/' + $scope.project._id + '/slots/' + slot.name)
@@ -80,6 +82,16 @@
       function callbackUrlAlert () {
         var message = window.location.protocol + '//' + window.location.host + '/deploy/' + $scope.project._id + '/callback';
         alert(message);
+      }
+      function deployNow (slot) {
+        slot.deployInProgress = true;
+        $http.post('/deploy/'+$scope.project._id+'/manual', {slot: slot})
+          .then(function (data) {
+            slot.deployInProgress = false;
+          }, function (err) {
+            toastr.error('Deploy failed');
+            slot.deployInProgress = false;
+          });
       }
 
       function fail (err) {
