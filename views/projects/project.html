@@ -18,7 +18,6 @@
           <input type="checkbox" ng-model="slot.status" ng-change="slotStatusChange(slot)">
           {{slot.status ? 'Enabled' : 'Disabled'}}
         </label>
-        {{slot.deployInProgress}}
         <button ng-hide="slot.status || slot.deployInProgress" ng-click="deployNow(slot)" class="btn btn-link">Deploy now</button>
         <button class="btn btn-link" ng-show="slot.deployInProgress" disabled>Deploying in progress ..</button>
         <hr>
@@ -86,6 +85,7 @@
         alert(message);
       }
       function deployNow (slot) {
+        if (! confirm('Are you sure ?')) return;
         slot.deployInProgress = true;
         startDeploy(slot);
       }
