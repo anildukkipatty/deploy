@@ -11,6 +11,17 @@
     <input type="text" style="width: 200px; margin-top: 16px;" class="form-control pull-right" placeholder="Filter slots" ng-model="slotFilter">
     <div class="clearfix"></div>
     <hr>
+    <div ng-show="logs.length > 0">
+      <div class="well">
+        <button ng-click="logs = []" class="btn btn-danger btn-xs">Clear</button>
+        <br>
+        <br>
+        <div ng-repeat="log in logs">
+          <pre>{{log.message}}</pre>
+        </div>
+      </div>
+      <hr>
+    </div>
     <div class="col-md-3" ng-repeat="slot in project.slots | filter: slotFilter">
       <div class="well">
         <h4>{{slot.name}}</h4>
@@ -44,6 +55,7 @@
         <button ng-click="slotDelete(slot, $index)" class="btn-link" style="padding: 2px 0px;">Delete</button>
       </div>
     </div>
+
     <div class="col-md-3" ng-hide="project.slots.length > 0">
       <div class="well">
         <h4>No slots added yet</h4>
@@ -65,6 +77,7 @@
     .controller('ProjectCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
       window.s = $scope;
       $scope.project = <%= JSON.stringify(project) %>;
+      $scope.logs = [];
       $scope.slotDelete = slotDelete;
       $scope.slotStatusChange = slotStatusChange;
       $scope.callbackUrlAlert = callbackUrlAlert;
@@ -91,10 +104,14 @@
         startDeploy(slot);
       }
       function startDeploy (slot) {
-        $http.post('/deploy/'+$scope.project._id+'/manual', slot)
+        $http.post('/deploy/'+$scope.project._id+'/manual', {name: slot.name})
           .then(function (data) {
             slot.deployInProgress = false;
             toastr.success("Deployment successfull");
+            var consoleo = data.data;
+            // var message = consoleo.stdout.replace(/\n/ig, '<br />') + consoleo.stderr.replace(/\n/ig, '<br />');
+            var message = consoleo.stdout + consoleo.stderr;
+            $scope.logs.unshift({message: message})
           }, function (err) {
             toastr.error('Deployment failed');
             slot.deployInProgress = false;

@@ -84,7 +84,7 @@ router.post('/:id/manual', function(req, res) {
             project.slots[slotIndex].results.push(deployResult)
             project.save(function (data) {
               if (err) return res.send(err, 500);
-              return res.send(stdOut);
+              return res.send({stdout: stdOut, stderr: stdErr});
             });
           }
         );
